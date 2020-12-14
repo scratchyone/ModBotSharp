@@ -36,6 +36,7 @@ namespace ModBot
             commands.RegisterCommands<Prefixes>();
             commands.RegisterCommands<Meta>();
             commands.RegisterCommands<Rename>();
+            commands.RegisterCommands<Delete>();
         }
         static Task<int> PrefixResolver(DiscordMessage message, DiscordUser client)
         {
