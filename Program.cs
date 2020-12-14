@@ -13,6 +13,7 @@ using System.Linq;
 using ModBot.Models;
 using ModBot.Commands;
 using DSharp​Plus.CommandsNext;
+using DSharpPlus.CommandsNext.Exceptions;
 
 namespace ModBot
 {
@@ -50,6 +51,28 @@ namespace ModBot
             }
             return -1;
         }
+        static async Task HandleErrors(CommandsNextExtension ex, CommandErrorEventArgs er, DiscordClient client)
+        {
+            client.Logger.LogError(er.Exception.ToString());
+            if (er.Exception is ModBot.UserError)
+            {
+                await er.Context.RespondAsync(embed: Embeds.Error
+                    .WithFooter($"Use {er.Context.Prefix}support to get an invite to the support server")
+                    .WithDescription(er.Exception.Message));
+            }
+            if (er.Exception is ChecksFailedException)
+            {
+                foreach (var check in (er.Exception as ChecksFailedException).FailedChecks)
+                {
+                    if (check is RequireUserPermissionsAttribute)
+                    {
+                        await er.Context.RespondAsync(embed: Embeds.Error
+                            .WithFooter($"Use {er.Context.Prefix}support to get an invite to the support server")
+                            .WithDescription($"You need {(check as RequireUserPermissionsAttribute).Permissions.ToString()} to run that command."));
+                    }
+                }
+            }
+        }
         static async Task MainAsync()
         {
             var discord = new DiscordClient(new DiscordConfiguration()
@@ -66,16 +89,7 @@ namespace ModBot
                 PrefixResolver = (m) => PrefixResolver(m, discord.CurrentUser)
             });
             RegisterCommands(ref commands);
-            commands.CommandErrored += async (ex, er) =>
-            {
-                discord.Logger.LogError(er.Exception.ToString());
-                if (er.Exception is ModBot.UserError)
-                {
-                    await er.Context.RespondAsync(embed: Embeds.Error
-                        .WithFooter($"Use {er.Context.Prefix}support to get an invite to the support server")
-                        .WithDescription(er.Exception.Message));
-                }
-            };
+            commands.CommandErrored += (a, b) => HandleErrors(a, b, discord);
             await discord.ConnectAsync();
             await Task.Delay(-1);
         }
