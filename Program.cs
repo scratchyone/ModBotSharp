@@ -12,7 +12,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using ModBot.Models;
 using ModBot.Commands;
-using DSharp​Plus.CommandsNext;
 using DSharpPlus.CommandsNext.Exceptions;
 
 namespace ModBot
@@ -37,19 +36,19 @@ namespace ModBot
             commands.RegisterCommands<Prefixes>();
             commands.RegisterCommands<Meta>();
         }
-        static async Task<int> PrefixResolver(DiscordMessage message, DiscordUser client)
+        static Task<int> PrefixResolver(DiscordMessage message, DiscordUser client)
         {
             var mentionPrefixLength = CommandsNextUtilities.GetMentionPrefixLength(message, client);
-            if (mentionPrefixLength != -1) return mentionPrefixLength;
+            if (mentionPrefixLength != -1) return Task.FromResult(mentionPrefixLength);
             var prefixes = context.Prefixes.Where(prefix => prefix.Server == message.Channel.GuildId.ToString())
                 .Select(prefix => prefix.PrefixText).OrderByDescending(prefix => prefix.Length).ToList();
             prefixes.Add("m: ");
             foreach (var prefix in prefixes)
             {
                 var prefixLength = CommandsNextUtilities.GetStringPrefixLength(message, prefix);
-                if (prefixLength != -1) return prefixLength;
+                if (prefixLength != -1) return Task.FromResult(prefixLength);
             }
-            return -1;
+            return Task.FromResult(-1);
         }
         static async Task HandleErrors(CommandsNextExtension ex, CommandErrorEventArgs er, DiscordClient client)
         {
