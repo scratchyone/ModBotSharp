@@ -74,6 +74,10 @@ namespace ModBot
                     }
                 }
             }
+            if (er.Exception is System.ArgumentException)
+            {
+                await er.Context.RespondAsync(embed: Embeds.Error.WithTitle("Syntax Error").WithDescription($"Run `{er.Context.Prefix}help {er.Command.Name}` for more information."));
+            }
         }
         static async Task MainAsync()
         {
