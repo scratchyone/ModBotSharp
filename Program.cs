@@ -35,7 +35,7 @@ namespace ModBot
         static void RegisterCommands(ref CommandsNextExtension commands)
         {
             commands.RegisterCommands<Prefixes>();
-            Prefixes.OnStart(commands.Client);
+            commands.RegisterCommands<Meta>();
         }
         static async Task<int> PrefixResolver(DiscordMessage message, DiscordUser client)
         {
