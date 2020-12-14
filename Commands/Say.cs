@@ -23,5 +23,12 @@ namespace ModBot.Commands
             await channel.SendMessageAsync(text);
             try { await ctx.Message.DeleteAsync(); } catch { }
         }
+        [Command("pin")]
+        [RequireUserPermissions(Permissions.ManageMessages)]
+        public async Task PinCommand(CommandContext ctx, [RemainingText] string text)
+        {
+            await (await ctx.Channel.SendMessageAsync(text)).PinAsync();
+            try { await ctx.Message.DeleteAsync(); } catch { }
+        }
     }
 }
