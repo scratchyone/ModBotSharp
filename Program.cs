@@ -42,7 +42,7 @@ namespace ModBot
             if (mentionPrefixLength != -1) return Task.FromResult(mentionPrefixLength);
             var prefixes = context.Prefixes.Where(prefix => prefix.Server == message.Channel.GuildId.ToString())
                 .Select(prefix => prefix.PrefixText).OrderByDescending(prefix => prefix.Length).ToList();
-            prefixes.Add("m: ");
+            prefixes.Add(Configuration["Prefix"]);
             foreach (var prefix in prefixes)
             {
                 var prefixLength = CommandsNextUtilities.GetStringPrefixLength(message, prefix);
@@ -81,6 +81,7 @@ namespace ModBot
             });
             var services = new ServiceCollection()
                 .AddSingleton<dataContext>()
+                .AddSingleton<IConfiguration>(Configuration)
                 .BuildServiceProvider();
             var commands = discord.UseCommandsNext(new CommandsNextConfiguration()
             {

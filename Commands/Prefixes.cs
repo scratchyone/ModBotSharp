@@ -6,6 +6,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using System.Linq;
 using ModBot.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace ModBot.Commands
 {
@@ -14,12 +15,13 @@ namespace ModBot.Commands
     public class Prefixes : Cog
     {
         public dataContext context { private get; set; }
+        public IConfiguration Configuration { private get; set; }
 
         [Command("list")]
         public async Task List(CommandContext ctx)
         {
             var prefixes = context.Prefixes.Where(p => p.Server == ctx.Message.Channel.GuildId.ToString()).Select(p => p.PrefixText).ToList();
-            prefixes.Add("m: ");
+            prefixes.Add(Configuration["Prefix"]);
             await ctx.RespondAsync(embed: new DiscordEmbedBuilder().WithTitle("Prefixes")
                 .WithColor(ModBot.Colors.Info)
                 .WithDescription(string.Join("\n", prefixes.Select(p => $"`{p}`"))));
