@@ -58,7 +58,7 @@ namespace ModBot.Commands
         {
             await OwOCommand(ctx, action, null);
         }
-        public static void OnStart(DiscordClient discord, IConfiguration Configuration)
+        new public static void OnStart(DiscordClient discord, IConfiguration Configuration)
         {
             discord.MessageReactionAdded += (a, b) => OnReactionChange(a, b.Message, Configuration);
             discord.MessageReactionRemoved += (a, b) => OnReactionChange(a, b.Message, Configuration);

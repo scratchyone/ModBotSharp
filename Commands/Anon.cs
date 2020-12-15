@@ -116,7 +116,7 @@ namespace ModBot.Commands
             await ctx.RespondAsync(embed: Embeds.Success.WithDescription($"Unbanned {user.Mention}"));
         }
 #pragma warning disable 4014
-        public static void OnStart(DiscordClient discord, IConfiguration configuration)
+        new public static void OnStart(DiscordClient discord, IConfiguration configuration)
         {
             var context = new dataContext();
             discord.MessageCreated += async (client, args) =>
