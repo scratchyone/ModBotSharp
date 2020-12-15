@@ -19,10 +19,12 @@ namespace ModBot.Commands
         [RequireUserPermissions(Permissions.ManageChannels)]
         public async Task DeleteChannel(CommandContext ctx)
         {
-            // TODO: Add confirmation here
-            await ctx.RespondAsync(embed: Embeds.Warning.WithDescription("Deleting channel in 5 seconds"));
-            await Task.Delay(5000);
-            await ctx.Channel.DeleteAsync();
+            if (await ctx.Confirm())
+            {
+                await ctx.RespondAsync(embed: Embeds.Warning.WithDescription("Deleting channel in 5 seconds"));
+                await Task.Delay(5000);
+                await ctx.Channel.DeleteAsync();
+            }
         }
 
         [Command("purge")]

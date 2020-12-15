@@ -13,6 +13,8 @@ using System.Linq;
 using ModBot.Models;
 using ModBot.Commands;
 using DSharpPlus.CommandsNext.Exceptions;
+using DSharpPlus.Interactivity.Extensions;
+using DSharpPlus.Interactivity;
 
 namespace ModBot
 {
@@ -97,6 +99,7 @@ namespace ModBot
                 Services = services,
                 PrefixResolver = (m) => PrefixResolver(m, discord.CurrentUser)
             });
+            discord.UseInteractivity(new InteractivityConfiguration() { });
             RegisterCommands(ref commands);
             commands.CommandErrored += (a, b) => HandleErrors(a, b, discord);
             await discord.ConnectAsync();
