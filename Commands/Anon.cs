@@ -126,7 +126,7 @@ namespace ModBot.Commands
                         if (!args.Message.Content.StartsWith("\\") // Not escaped
                             && context.Anonchannels.Any(c => c.Id == args.Channel.Id.ToString()) // In an anon channel
                             && !args.Author.IsBot // Not a bot
-                            && !context.AnonBans.AsNoTracking().AsEnumerable().Any(u => u.User == args.Author.Id.ToString()
+                            && !context.AnonBans.AsNoTracking().AsEnumerable().Any(u => u.User == args.Author.Id.ToString() // AsNoTracking used to avoid cache
                                && u.Server == args.Guild.Id.ToString()
                                && (u.ExpiresAt == (ulong)0 || u.ExpiresAt > (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()))) // Not anonbanned
                         {
@@ -150,8 +150,6 @@ namespace ModBot.Commands
                             });
                             await context.SaveChangesAsync();
                         }
-
-
                     }
                 );
             };
