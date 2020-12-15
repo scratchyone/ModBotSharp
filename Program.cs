@@ -84,7 +84,7 @@ namespace ModBot
             }
             else if (er.Exception is System.ArgumentException)
             {
-                await er.Context.RespondAsync(embed: Embeds.Error.WithTitle("Syntax Error").WithDescription($"Run `{er.Context.Prefix}help {er.Command.Name}` for more information."));
+                await er.Context.RespondAsync(embed: Embeds.Error.WithTitle("Syntax Error").WithDescription($"Run `{er.Context.Prefix}help {er.Command.QualifiedName}` for more information."));
             }
             else if (er.Exception is CommandNotFoundException) { }
             else
