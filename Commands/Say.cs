@@ -16,7 +16,10 @@ namespace ModBot.Commands
     {
         public IConfiguration Configuration { private get; set; }
         [Command("say")]
-        public async Task SayCommand(CommandContext ctx, DiscordChannel channel, [RemainingText] string text)
+        [Description("Make the bot say something in a channel")]
+        public async Task SayCommand(CommandContext ctx,
+            [Description("Channel to send the message in")] DiscordChannel channel,
+            [Description("Text to send")][RemainingText] string text)
         {
             if (channel.GuildId != ctx.Guild.Id) return;
             if (!(channel.PermissionsFor(ctx.Member).HasPermission(Permissions.ManageMessages) || ctx.Member.Id.ToString() == Configuration["Owner"]))
@@ -26,7 +29,8 @@ namespace ModBot.Commands
         }
         [Command("pin")]
         [RequireUserPermissions(Permissions.ManageMessages)]
-        public async Task PinCommand(CommandContext ctx, [RemainingText] string text)
+        [Description("Make the bot say something in a channel and then pin it")]
+        public async Task PinCommand(CommandContext ctx, [Description("Text to pin")][RemainingText] string text)
         {
             await (await ctx.Channel.SendMessageAsync(text)).PinAsync();
             try { await ctx.Message.DeleteAsync(); } catch { }

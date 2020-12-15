@@ -16,6 +16,7 @@ namespace ModBot.Commands
         public dataContext context { private get; set; }
 
         [Command("deletechannel")]
+        [Description("Delete the current channel")]
         [RequireUserPermissions(Permissions.ManageChannels)]
         public async Task DeleteChannel(CommandContext ctx)
         {
@@ -28,7 +29,8 @@ namespace ModBot.Commands
         }
 
         [Command("purge")]
-        public async Task Purge(CommandContext ctx, int count)
+        [Description("Delete up to 50 messages from the current channel")]
+        public async Task Purge(CommandContext ctx, [Description("Number of messages to delete")] int count)
         {
             if (count > 50) throw new UserError("Cannot delete more than 50 messages");
             var allMessages = await ctx.Channel.GetMessagesAsync(count + 1);

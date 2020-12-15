@@ -15,16 +15,19 @@ namespace ModBot.Commands
         public dataContext context { private get; set; }
 
         [Command("support")]
+        [Description("Get an invite to the bot's support server")]
         public async Task Support(CommandContext ctx)
         {
             await ctx.RespondAsync("https://discord.gg/wJ2TCpx");
         }
         [Command("ping")]
+        [Description("Check the bot's current ping")]
         public async Task Ping(CommandContext ctx)
         {
             await ctx.RespondAsync($"Pong! Took {Math.Round((ctx.Message.CreationTimestamp - DateTime.Now).TotalMilliseconds)} ms");
         }
         [Command("invite")]
+        [Description("Get an invite to add the bot to your own servers")]
         public async Task Invite(CommandContext ctx)
         {
             await ctx.RespondAsync(embed: new DiscordEmbedBuilder()
@@ -35,6 +38,7 @@ namespace ModBot.Commands
                 .WithFooter("Made with ❤️"));
         }
         [Command("about")]
+        [Description("Get information about the bot")]
         public async Task About(CommandContext ctx)
         {
             var restartedMinutesAgo = Math.Round((DateTime.UtcNow - Process.GetCurrentProcess().StartTime.ToUniversalTime()).TotalMinutes, 2);

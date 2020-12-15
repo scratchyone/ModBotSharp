@@ -19,7 +19,8 @@ namespace ModBot.Commands
         public IConfiguration Configuration { private get; set; }
 
         [Command("imagepoll")]
-        public async Task ImagePollCommand(CommandContext ctx, [RemainingText] string text)
+        [Description("Create a yes/no poll")]
+        public async Task ImagePollCommand(CommandContext ctx, [Description("Title of the poll")][RemainingText] string text)
         {
             // TODO: Add flash warning
             var mediaGen = new MediaGen(Configuration["MediaGen"]);
@@ -36,7 +37,10 @@ namespace ModBot.Commands
         }
 
         [Command("owo")]
-        public async Task OwOCommand(CommandContext ctx, string action, DiscordMember authee)
+        [Description("Display a gif")]
+        public async Task OwOCommand(CommandContext ctx,
+            [Description("Action to get a gif of")] string action,
+            [Description("Person you want to do the action to (optional)")] DiscordMember authee)
         {
             var mediaGen = new MediaGen(Configuration["MediaGen"]);
             mediaGen.AssertOnline();
@@ -54,7 +58,7 @@ namespace ModBot.Commands
             }
         }
         [Command("owo")]
-        public async Task OwOCommand(CommandContext ctx, string action)
+        public async Task OwOCommand(CommandContext ctx, [Description("Action to get a gif of")] string action)
         {
             await OwOCommand(ctx, action, null);
         }

@@ -16,16 +16,18 @@ namespace ModBot.Commands
         public dataContext context { private get; set; }
 
         [Command("setchannelname")]
+        [Description("Set the name of the current channel")]
         [RequireUserPermissions(Permissions.ManageChannels)]
-        public async Task SetChannelName(CommandContext ctx, [RemainingText] string name)
+        public async Task SetChannelName(CommandContext ctx, [Description("New channel name")][RemainingText] string name)
         {
             await ctx.Channel.ModifyAsync(c => c.Name = name);
             await ctx.RespondAsync(embed: Embeds.Success.WithDescription("Set channel name!"));
         }
 
         [Command("setservername")]
+        [Description("Set the name of the current server")]
         [RequireUserPermissions(Permissions.ManageGuild)]
-        public async Task SetServerName(CommandContext ctx, [RemainingText] string name)
+        public async Task SetServerName(CommandContext ctx, [Description("New server name")][RemainingText] string name)
         {
             await ctx.Guild.ModifyAsync(c => c.Name = name);
             await ctx.RespondAsync(embed: Embeds.Success.WithDescription("Set server name!"));

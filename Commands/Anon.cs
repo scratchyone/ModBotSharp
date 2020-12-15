@@ -20,13 +20,15 @@ namespace ModBot.Commands
         public dataContext context { private get; set; }
 
         [RequireUserPermissions(Permissions.ManageChannels)]
+        [Description("Enable or disable an anonymous channel")]
         [Group("setanonchannel")]
         public class SetAnonChannel : BaseCommandModule
         {
             public dataContext context { private get; set; }
 
             [Command("enabled")]
-            public async Task EnableAnonChannel(CommandContext ctx, DiscordChannel channel)
+            [Description("Enable an anonymous channel")]
+            public async Task EnableAnonChannel(CommandContext ctx, [Description("Channel to enable")] DiscordChannel channel)
             {
                 if (channel.GuildId != ctx.Guild.Id) return;
                 if (context.Anonchannels.Any(c => c.Id == channel.Id.ToString()))
@@ -43,7 +45,8 @@ namespace ModBot.Commands
             }
 
             [Command("disabled")]
-            public async Task DisableAnonChannel(CommandContext ctx, DiscordChannel channel)
+            [Description("Disable an anonymous channel")]
+            public async Task DisableAnonChannel(CommandContext ctx, [Description("Channel to disable")] DiscordChannel channel)
             {
                 if (channel.GuildId != ctx.Guild.Id) return;
                 var ac = context.Anonchannels.SingleOrDefault(c => c.Id == channel.Id.ToString());
@@ -60,6 +63,7 @@ namespace ModBot.Commands
             }
         }
         [Command("listanonchannels")]
+        [Description("List all anonymous channels")]
         public async Task ListAnonChannels(CommandContext ctx)
         {
             var anonChannels = string.Join("\n", context.Anonchannels.Where(c => c.Server == ctx.Guild.Id.ToString())
@@ -68,7 +72,8 @@ namespace ModBot.Commands
             await ctx.RespondAsync(embed: Embeds.Info.WithTitle("Anon Channels").WithDescription(anonChannels));
         }
         [Command("whosaid")]
-        public async Task WhoSaid(CommandContext ctx, ulong id)
+        [Description("Check who sent a message in an anonymous channel")]
+        public async Task WhoSaid(CommandContext ctx, [Description("ID of the message")] ulong id)
         {
             var messageSender = context.Anonmessages.SingleOrDefault(m => m.Id == id.ToString() && m.Server == ctx.Guild.Id.ToString());
             if (messageSender == null) throw new UserError("Message not found");
@@ -77,8 +82,9 @@ namespace ModBot.Commands
         }
 
         [RequireUserPermissions(Permissions.ManageMessages)]
+        [Description("Ban a user from using anonymous channels on the current server")]
         [Command("anonban")]
-        public async Task AnonBan(CommandContext ctx, DiscordUser user)
+        public async Task AnonBan(CommandContext ctx, [Description("User to ban")] DiscordUser user)
         {
             var oldBan = context.AnonBans.SingleOrDefault(b => b.User == user.Id.ToString() && b.Server == ctx.Guild.Id.ToString());
             if (oldBan != null) context.Remove(oldBan);
@@ -91,7 +97,7 @@ namespace ModBot.Commands
             await ctx.RespondAsync(embed: Embeds.Success.WithDescription($"Banned {user.Mention} permanently"));
         }
         [Command("anonban")]
-        public async Task AnonBan(CommandContext ctx, DiscordUser user, TimeSpan time)
+        public async Task AnonBan(CommandContext ctx, [Description("User to ban")] DiscordUser user, [Description("How long to ban the user")] TimeSpan time)
         {
             var oldBan = context.AnonBans.SingleOrDefault(b => b.User == user.Id.ToString() && b.Server == ctx.Guild.Id.ToString());
             if (oldBan != null) context.Remove(oldBan);
@@ -107,7 +113,8 @@ namespace ModBot.Commands
         }
         [RequireUserPermissions(Permissions.ManageMessages)]
         [Command("anonunban")]
-        public async Task AnonUnBan(CommandContext ctx, DiscordUser user)
+        [Description("Unban a user from using anonymous channels on the current server")]
+        public async Task AnonUnBan(CommandContext ctx, [Description("User to unban")] DiscordUser user)
         {
             var oldBan = context.AnonBans.SingleOrDefault(b => b.User == user.Id.ToString() && b.Server == ctx.Guild.Id.ToString());
             if (oldBan != null) context.Remove(oldBan);
