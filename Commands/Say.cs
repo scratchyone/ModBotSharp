@@ -18,6 +18,7 @@ namespace ModBot.Commands
         [Command("say")]
         public async Task SayCommand(CommandContext ctx, DiscordChannel channel, [RemainingText] string text)
         {
+            if (channel.GuildId != ctx.Guild.Id) return;
             if (!(channel.PermissionsFor(ctx.Member).HasPermission(Permissions.ManageMessages) || ctx.Member.Id.ToString() == Configuration["Owner"]))
                 throw new UserError("You don't have permission to do that");
             await channel.SendMessageAsync(text);

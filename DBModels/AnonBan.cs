@@ -17,5 +17,6 @@ namespace ModBot.Models
         [Key]
         [Column("server")]
         public string Server { get; set; }
+        public ulong ExpiresAt { get; set; }
     }
 }
