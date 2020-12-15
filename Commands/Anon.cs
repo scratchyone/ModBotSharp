@@ -131,6 +131,7 @@ namespace ModBot.Commands
                                && (u.ExpiresAt == (ulong)0 || u.ExpiresAt > (ulong)DateTimeOffset.Now.ToUnixTimeSeconds()))) // Not anonbanned
                         {
                             if (args.Message.Attachments.Count == 0) try { await args.Message.DeleteAsync(); } catch { }
+                            // TODO: Work around rate limit here
                             var webhook = await args.Channel.CreateWebhookAsync("Anon");
                             var msg = new DiscordWebhookBuilder().WithContent(args.Message.Content);
                             foreach (var attachment in args.Message.Attachments)
