@@ -140,7 +140,7 @@ namespace ModBot.Commands
                             if (args.Message.Attachments.Count == 0) try { await args.Message.DeleteAsync(); } catch { }
                             // TODO: Work around rate limit here
                             var webhook = await args.Channel.CreateWebhookAsync("Anon");
-                            var msg = new DiscordWebhookBuilder().WithContent(args.Message.Content);
+                            var msg = new DiscordWebhookBuilder().WithContent(args.Message.Content.CleanPings(args.Guild));
                             foreach (var attachment in args.Message.Attachments)
                             {
                                 var fileStream = WebRequest.Create(attachment.ProxyUrl).GetResponse().GetResponseStream();

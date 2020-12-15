@@ -4,6 +4,9 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity.Extensions;
 using System.Threading.Tasks;
 using System;
+using System.Text.RegularExpressions;
+using System.Linq;
+
 namespace ModBot
 {
     public static class Extensions
@@ -35,6 +38,18 @@ namespace ModBot
         {
             if (string.IsNullOrEmpty(value)) return value;
             return value.Length <= maxLength ? value : value.Substring(0, maxLength);
+        }
+        public static string CleanPings(this string value, DiscordGuild guild)
+        {
+            var newString = value;
+            newString = newString.Replace("@everyone", "@​everyone").Replace("@here", "@​here");
+            var rolePings = Regex.Matches(newString, "<@&([0-9]+)>");
+            foreach (Match match in rolePings)
+            {
+                var role = guild.Roles.Select(r => r.Value).FirstOrDefault(r => r.Id.ToString() == match.Groups[1].Value);
+                newString = newString.Replace(match.Groups[0].Value, role == null ? "PING" : "@​" + role.Name);
+            }
+            return newString;
         }
     }
 }
