@@ -11,8 +11,9 @@ namespace ModBot
     }
     class Embeds
     {
-        public static DiscordEmbedBuilder Success = new DiscordEmbedBuilder().WithTitle("Success!").WithColor(Colors.Success);
-        public static DiscordEmbedBuilder Error = new DiscordEmbedBuilder().WithTitle("Error").WithColor(Colors.Error);
-        public static DiscordEmbedBuilder Warning = new DiscordEmbedBuilder().WithTitle("Warning!").WithColor(Colors.Warning);
+        public readonly static DiscordEmbedBuilder Success = new DiscordEmbedBuilder().WithTitle("Success!").WithColor(Colors.Success);
+        public readonly static DiscordEmbedBuilder Error = new DiscordEmbedBuilder().WithTitle("Error").WithColor(Colors.Error);
+        public readonly static DiscordEmbedBuilder Warning = new DiscordEmbedBuilder().WithTitle("Warning!").WithColor(Colors.Warning);
+        public readonly static DiscordEmbedBuilder Info = new DiscordEmbedBuilder().WithTitle("Info!").WithColor(Colors.Info);
     }
 }

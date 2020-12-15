@@ -35,12 +35,16 @@ namespace ModBot
         // Registers all command modules
         static void RegisterCommands(ref CommandsNextExtension commands)
         {
+            // Register commands
             commands.RegisterCommands<Prefixes>();
             commands.RegisterCommands<Meta>();
             commands.RegisterCommands<Rename>();
             commands.RegisterCommands<Delete>();
             commands.RegisterCommands<Say>();
             commands.RegisterCommands<MediaGenCommands>();
+            commands.RegisterCommands<Anon>();
+            // Execute onStart scripts to register events
+            Anon.OnStart(commands.Client, Configuration);
             MediaGenCommands.OnStart(commands.Client, Configuration);
         }
         static Task<int> PrefixResolver(DiscordMessage message, DiscordUser client)
@@ -66,7 +70,7 @@ namespace ModBot
                     .WithFooter($"Use {er.Context.Prefix}support to get an invite to the support server")
                     .WithDescription(er.Exception.Message));
             }
-            if (er.Exception is ChecksFailedException)
+            else if (er.Exception is ChecksFailedException)
             {
                 foreach (var check in (er.Exception as ChecksFailedException).FailedChecks)
                 {
@@ -78,9 +82,16 @@ namespace ModBot
                     }
                 }
             }
-            if (er.Exception is System.ArgumentException)
+            else if (er.Exception is System.ArgumentException)
             {
                 await er.Context.RespondAsync(embed: Embeds.Error.WithTitle("Syntax Error").WithDescription($"Run `{er.Context.Prefix}help {er.Command.Name}` for more information."));
+            }
+            else if (er.Exception is CommandNotFoundException) { }
+            else
+            {
+                await er.Context.RespondAsync(embed: Embeds.Error.WithTitle("Unhandled Error")
+                    .WithDescription($"Something has gone wrong.\n```{er.Exception.Message.Truncate(2000)}```")
+                    .WithFooter($"Use {er.Context.Prefix}support to get an invite to the support server"));
             }
         }
         static async Task MainAsync()
