@@ -43,6 +43,7 @@ namespace ModBot
             commands.RegisterCommands<Say>();
             commands.RegisterCommands<MediaGenCommands>();
             commands.RegisterCommands<Anon>();
+            commands.RegisterCommands<Avatar>();
             // Execute onStart scripts to register events
             Anon.OnStart(commands.Client, Configuration);
             MediaGenCommands.OnStart(commands.Client, Configuration);
