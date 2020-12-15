@@ -34,6 +34,30 @@ namespace ModBot.Commands
             await context.Polls.AddAsync(new Poll { Message = pollMessage.Id.ToString() });
             await context.SaveChangesAsync();
         }
+
+        [Command("owo")]
+        public async Task OwOCommand(CommandContext ctx, string action, DiscordMember authee)
+        {
+            var mediaGen = new MediaGen(Configuration["MediaGen"]);
+            mediaGen.AssertOnline();
+            if (action != "help")
+            {
+                var owoInfo = await mediaGen.GetOwoInfo(action, ctx.Member.DisplayName, authee == null ? null : authee.DisplayName);
+                await ctx.RespondAsync(embed: new DiscordEmbedBuilder()
+                    .WithAuthor(name: owoInfo.authorName, iconUrl: ctx.Member.AvatarUrl)
+                    .WithImageUrl(owoInfo.imageURL)
+                    .WithColor(new DiscordColor(owoInfo.color)));
+            }
+            else
+            {
+                await ctx.RespondAsync($"Possible actions are {string.Join(", ", await mediaGen.GetOwoActions())}");
+            }
+        }
+        [Command("owo")]
+        public async Task OwOCommand(CommandContext ctx, string action)
+        {
+            await OwOCommand(ctx, action, null);
+        }
         public static void OnStart(DiscordClient discord, IConfiguration Configuration)
         {
             discord.MessageReactionAdded += (a, b) => OnReactionChange(a, b.Message, Configuration);
