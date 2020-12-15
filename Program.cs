@@ -44,8 +44,10 @@ namespace ModBot
             commands.RegisterCommands<MediaGenCommands>();
             commands.RegisterCommands<Anon>();
             commands.RegisterCommands<Avatar>();
+            commands.RegisterCommands<ReactionPins>();
             // Execute onStart scripts to register events
             Anon.OnStart(commands.Client, Configuration);
+            ReactionPins.OnStart(commands.Client, Configuration);
             MediaGenCommands.OnStart(commands.Client, Configuration);
         }
         static Task<int> PrefixResolver(DiscordMessage message, DiscordUser client)
