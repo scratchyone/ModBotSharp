@@ -20,12 +20,12 @@ namespace ModBot.Commands
             await ctx.RespondAsync("https://discord.gg/wJ2TCpx");
         }
         [Command("ping")]
-        public async Task Ping(CommandContext ctx, [RemainingText] string prefix)
+        public async Task Ping(CommandContext ctx)
         {
             await ctx.RespondAsync($"Pong! Took {Math.Round((ctx.Message.CreationTimestamp - DateTime.Now).TotalMilliseconds)} ms");
         }
         [Command("invite")]
-        public async Task Invite(CommandContext ctx, [RemainingText] string prefix)
+        public async Task Invite(CommandContext ctx)
         {
             await ctx.RespondAsync(embed: new DiscordEmbedBuilder()
                 .WithTitle("Click here to invite ModBot to your server")
@@ -35,7 +35,7 @@ namespace ModBot.Commands
                 .WithFooter("Made with ❤️"));
         }
         [Command("about")]
-        public async Task About(CommandContext ctx, [RemainingText] string prefix)
+        public async Task About(CommandContext ctx)
         {
             var restartedMinutesAgo = Math.Round((DateTime.UtcNow - Process.GetCurrentProcess().StartTime.ToUniversalTime()).TotalMinutes, 2);
             await ctx.RespondAsync(embed: new DiscordEmbedBuilder()
