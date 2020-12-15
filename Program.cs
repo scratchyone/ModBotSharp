@@ -38,6 +38,8 @@ namespace ModBot
             commands.RegisterCommands<Rename>();
             commands.RegisterCommands<Delete>();
             commands.RegisterCommands<Say>();
+            commands.RegisterCommands<MediaGenCommands>();
+            MediaGenCommands.OnStart(commands.Client, Configuration);
         }
         static Task<int> PrefixResolver(DiscordMessage message, DiscordUser client)
         {
