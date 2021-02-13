@@ -61,6 +61,16 @@ namespace ModBot.APIs
             Console.WriteLine(owoInfo.authorName);
             return owoInfo;
         }
+        public async Task<Models.CoinFlip> GetCoinFlip()
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(URL);
+            var url = $"coinFlip";
+            var response = await client.GetAsync(url);
+            var owoInfo = JsonSerializer.Deserialize<Models.CoinFlip>(await response.Content.ReadAsStringAsync());
+            owoInfo.imageURL = $"{URL}owoProxy.gif?url={HttpUtility.UrlEncode(owoInfo.imageURL)}";
+            return owoInfo;
+        }
         private string ToQueryString(NameValueCollection nvc)
         {
             var array = (
@@ -82,5 +92,10 @@ namespace ModBot.APIs.Models
         public string imageURL { get; set; }
         public string authorName { get; set; }
         public string color { get; set; }
+    }
+    class CoinFlip
+    {
+        public string imageURL { get; set; }
+        public int length { get; set; }
     }
 }

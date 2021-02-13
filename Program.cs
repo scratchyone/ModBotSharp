@@ -45,6 +45,7 @@ namespace ModBot
             commands.RegisterCommands<Anon>();
             commands.RegisterCommands<Avatar>();
             commands.RegisterCommands<ReactionPins>();
+            //commands.RegisterCommands<Commands.Utilities>();
             // Execute onStart scripts to register events
             Anon.OnStart(commands.Client, Configuration);
             ReactionPins.OnStart(commands.Client, Configuration);

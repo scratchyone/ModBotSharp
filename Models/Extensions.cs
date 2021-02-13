@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System;
 using System.Text.RegularExpressions;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace ModBot
 {
@@ -38,6 +39,15 @@ namespace ModBot
         {
             if (string.IsNullOrEmpty(value)) return value;
             return value.Length <= maxLength ? value : value.Substring(0, maxLength);
+        }
+        public static T RandomElement<T>(this IEnumerable<T> enumerable)
+        {
+            return enumerable.RandomElementUsing<T>(new Random());
+        }
+        public static T RandomElementUsing<T>(this IEnumerable<T> enumerable, Random rand)
+        {
+            int index = rand.Next(0, enumerable.Count());
+            return enumerable.ElementAt(index);
         }
         public static string CleanPings(this string value, DiscordGuild guild)
         {

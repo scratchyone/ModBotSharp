@@ -36,17 +36,31 @@ namespace ModBot.Commands
             await context.SaveChangesAsync();
         }
 
+        [Command("pick"), Aliases("choose", "select")]
+        [Description("Pick a random item")]
+        public async Task AvatarCommand(CommandContext ctx, [Description("The items to pick (seperated by ;)"), RemainingText] string options)
+        {
+            var mediaGen = new MediaGen(Configuration["MediaGen"]);
+            mediaGen.AssertOnline();
+            var gif = await mediaGen.GetCoinFlip();
+            var gifMessage = await ctx.RespondAsync(new DiscordEmbedBuilder().WithImageUrl(gif.imageURL));
+            await Task.Delay(gif.length);
+            await gifMessage.ModifyAsync(
+                embed: Embeds.Info.WithTitle("")
+                .WithDescription(options.Split(";").RandomElement())
+                .Build());
+        }
         [Command("owo")]
         [Description("Display a gif")]
         public async Task OwOCommand(CommandContext ctx,
             [Description("Action to get a gif of")] string action,
-            [Description("Person you want to do the action to (optional)")] DiscordMember authee)
+            [Description("Person you want to do the action to (optional)")] DiscordMember person)
         {
             var mediaGen = new MediaGen(Configuration["MediaGen"]);
             mediaGen.AssertOnline();
             if (action != "help")
             {
-                var owoInfo = await mediaGen.GetOwoInfo(action, ctx.Member.DisplayName, authee == null ? null : authee.DisplayName);
+                var owoInfo = await mediaGen.GetOwoInfo(action, ctx.Member.DisplayName, person == null ? null : person.DisplayName);
                 await ctx.RespondAsync(embed: new DiscordEmbedBuilder()
                     .WithAuthor(name: owoInfo.authorName, iconUrl: ctx.Member.AvatarUrl)
                     .WithImageUrl(owoInfo.imageURL)
