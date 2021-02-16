@@ -11,6 +11,7 @@ using System.IO;
 
 namespace ModBot.Commands
 {
+    [RequireGuild]
     public class Spoil : Cog
     {
 
