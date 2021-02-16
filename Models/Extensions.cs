@@ -18,10 +18,14 @@ namespace ModBot
         }
         public static async Task<bool> Confirm(this CommandContext ctx)
         {
-            var emoji = DiscordEmoji.FromName(ctx.Client, ":white_check_mark:");
-            var message = await ctx.RespondAsync(embed: Embeds.Warning.WithTitle("Are you sure?").WithDescription("React with :white_check_mark: to confirm."));
-            await message.CreateReactionAsync(emoji);
-            var result = await message.WaitForReactionAsync(ctx.Member, emoji, TimeSpan.FromSeconds(10));
+            var waitEmoji = DiscordEmoji.FromName(ctx.Client, ":arrows_counterclockwise:");
+            var confirmEmoji = DiscordEmoji.FromName(ctx.Client, ":white_check_mark:");
+            var message = await ctx.RespondAsync(embed: Embeds.Warning.WithTitle("Are you sure?").WithDescription("React with :white_check_mark: when it appears to confirm."));
+            await message.CreateReactionAsync(waitEmoji);
+            await Task.Delay(2000);
+            try { await message.DeleteAllReactionsAsync(); } catch (Exception) { }
+            await message.CreateReactionAsync(confirmEmoji);
+            var result = await message.WaitForReactionAsync(ctx.Member, confirmEmoji, TimeSpan.FromSeconds(10));
             if (!result.TimedOut)
             {
                 await message.ModifyAsync(embed: Embeds.Success.WithTitle("Confirmation Successful").Build());
