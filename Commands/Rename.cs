@@ -11,6 +11,7 @@ using DSharpPlus.Net.Models;
 
 namespace ModBot.Commands
 {
+    [RequireGuild]
     public class Rename : Cog
     {
         public dataContext context { private get; set; }
