@@ -10,7 +10,6 @@ namespace ModBot.Commands
 {
     public class Avatar : Cog
     {
-
         [Command("avatar"), Aliases("profilepic", "pfp")]
         [Description("Get a user's profile picture")]
         public async Task AvatarCommand(CommandContext ctx, [Description("The user to get the profile picture of")] DiscordMember user)

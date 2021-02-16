@@ -45,6 +45,7 @@ namespace ModBot
             commands.RegisterCommands<Anon>();
             commands.RegisterCommands<Avatar>();
             commands.RegisterCommands<ReactionPins>();
+            commands.RegisterCommands<Spoil>();
             //commands.RegisterCommands<Commands.Utilities>();
             // Execute onStart scripts to register events
             Anon.OnStart(commands.Client, Configuration);
@@ -83,6 +84,12 @@ namespace ModBot
                         await er.Context.RespondAsync(embed: Embeds.Error
                             .WithFooter($"Use {er.Context.Prefix}support to get an invite to the support server")
                             .WithDescription($"You need {(check as RequireUserPermissionsAttribute).Permissions.ToString()} to run that command."));
+                    }
+                    if (check is RequireBotPermissionsAttribute)
+                    {
+                        await er.Context.RespondAsync(embed: Embeds.Error
+                            .WithFooter($"Use {er.Context.Prefix}support to get an invite to the support server")
+                            .WithDescription($"I need {(check as RequireBotPermissionsAttribute).Permissions.ToString()} to run that command."));
                     }
                 }
             }
